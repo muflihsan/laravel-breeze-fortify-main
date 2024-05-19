@@ -3,7 +3,6 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
-        @csrf
 
         <!-- Email Address -->
         <div>
@@ -30,17 +29,25 @@
                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
                 <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
-            {!! NoCaptcha::renderJs() !!}
-            {!! NoCaptcha::display() !!}
+            @if (session()->get('login_attempts', 0) >= 3)
+                <div class="justify-content-center mt-2 mx-auto" style="width: max-content;">
+                    {!! NoCaptcha::renderJs() !!}
+                    {!! NoCaptcha::display() !!}
+                </div>
+            @endif
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
+            {{-- @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
                 </a>
-            @endif
+            @endif --}}
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                href="{{ route('register') }}">
+                {{ __('Do not have an account?') }}
+            </a>
 
             <x-primary-button class="ml-3">
                 {{ __('Log in') }}
